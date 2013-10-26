@@ -18,9 +18,28 @@ angular.module('testingClientApp').
     });
   }).
 
-  controller('DemoCtrl', function($rootScope, $scope, $window, Token) {
-    $scope.accessToken = Token.get();
-    console.log("aaa");
+  controller('DemoCtrl', function($rootScope, $scope, $location, $window, Token, localStorageService) {
+    // $scope.accessToken = Token.get();
+
+    var query_params = $location.url().split('?');
+    var query_params_hash = {};
+
+    if(query_params.length != 1)
+      query_params_hash = $.deparam(query_params[1]);
+
+    console.log("support",localStorageService.isSupported());
+    console.log(localStorageService.get('access_token'));
+    if(localStorageService.get('access_token') == null){
+      localStorageService.add('access_token',query_params_hash['access_token']);
+      console.log("Storing access_token in localStorageService");
+    }
+    else{
+      console.log(localStorageService.get('access_token'));
+      console.log("Accessing access_token from localStorageService");
+    }
+      
+
+    console.log(query_params_hash);
 
     $scope.authenticate = function() {
       var extraParams = $scope.askApproval ? {approval_prompt: 'force'} : {};

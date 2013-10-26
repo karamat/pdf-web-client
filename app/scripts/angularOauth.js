@@ -233,6 +233,6 @@ angular.module('angularOauth', []).
     console.log(params);
     // window.opener.postMessage(params, "*");
     // window.close();
-    window.location.replace(window.location.origin+"#/demo?access_token="+params['access_token']);
+    window.location.replace(window.location.origin+"#/demo?access_token="+params['access_token']+"&expires_in="+params['expires_in']);
 
   });
