@@ -27,19 +27,16 @@ angular.module('testingClientApp').
     if(query_params.length != 1)
       query_params_hash = $.deparam(query_params[1]);
 
-    console.log("support",localStorageService.isSupported());
-    console.log(localStorageService.get('access_token'));
-    if(localStorageService.get('access_token') == null){
-      localStorageService.add('access_token',query_params_hash['access_token']);
-      console.log("Storing access_token in localStorageService");
+    if(localStorageService.isSupported()){
+      if(localStorageService.get('access_token') == null)
+        localStorageService.add('access_token',query_params_hash['access_token']);
+      $scope.access_token = localStorageService.get('access_token');
     }
     else{
-      console.log(localStorageService.get('access_token'));
-      console.log("Accessing access_token from localStorageService");
+      if(localStorageService.cookie.get('access_token') == null)
+        localStorageService.cookie.add('access_token',query_params_hash['access_token'])
+      $scope.access_token = localStorageService.cookie.get('access_token');
     }
-      
-
-    console.log(query_params_hash);
 
     $scope.authenticate = function() {
       var extraParams = $scope.askApproval ? {approval_prompt: 'force'} : {};
@@ -67,4 +64,16 @@ angular.module('testingClientApp').
           alert("Failed to get token from popup.");
         });
     };
+    $scope.signOut = function() {
+      if(localStorageService.isSupported())
+        localStorageService.remove('access_token');
+      else
+        localStorageService.cookie.remove('access_token');
+      $scope.access_token = null;
+      $location.url($location.path());
+    };
+
+    $scope.register = function(){
+      console.log('Registering');
+    }
   });

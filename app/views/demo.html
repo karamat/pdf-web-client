@@ -1,8 +1,16 @@
 <div>
-  <input type="checkbox" id="askApproval" ng-model="askApproval" />
+  <!-- <input type ="checkbox" id="askApproval" ng-model="askApproval" />
   <label for="askApproval">Always ask me for approval (even if I've already given it)</label>
+   -->
+  <div ng-hide = "access_token">
+    <button ng-click="authenticate()">Sign In</button>
+  </div>
+  <div ng-show = "access_token" >
+    <button ng-click="signOut()">Sign Out</button>
+  </div>
+
   <div>
-    <button ng-click="authenticate()">Authenticate</button>
+    <button ng-click="register()">Sign Up</button>
   </div>
 
   <div ng-show="accessToken" style="display: none">
